@@ -34,11 +34,11 @@ party.append("Lyra the Healer")
 print(f"\n{party[-1]} has joined the party!")
 
 hero_stats = {
-    "name": hero_name,
-    "health": 100,
-    "attack": 15,
-    "defense": 8,
-    "gold": remaining_gold
+    "Name": hero_name,
+    "Health": 100,
+    "Attack": 15,
+    "Defense": 8,
+    "Gold": remaining_gold
 }
 
 print(f"\n--- Hero Stats ---")
