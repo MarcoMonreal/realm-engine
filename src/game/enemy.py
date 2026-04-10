@@ -13,15 +13,15 @@ class Enemy:
         return self.hp > 0
 
     def __str__(self):
-        return f"{self.name} - HP: {self.hp}, Attack: {self.attack}, Defense: {self.defense}"
+        return f"\nA wild {self.name} appears! \n{self.name} - HP: {self.hp}, Attack: {self.attack}, Defense: {self.defense}"
 
 class Goblin(Enemy):
     def __init__(self):
-        super().__init__("Goblin", 30, 12, 4)
+        super().__init__("Goblin", 20, 12, 2)
 
 class Skeleton(Enemy):
     def __init__(self):
-        super().__init__("Skeleton", 55, 16, 6)
+        super().__init__("Skeleton", 50, 16, 6)
 
 class DarkKnight(Enemy):
     def __init__(self):

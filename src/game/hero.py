@@ -31,7 +31,7 @@ class Hero:
         return self.hp > 0
 
     def __str__(self):
-        return f"Hail {self.name} the level {self.level} {self.hero_class}! \nYou have {self.hp} health and {self.gold} left."
+        return f"Hail {self.name} the level {self.level} {self.hero_class}! \nYou have {self.hp} health and {self.gold} gold in your pocket."
 
 class Warrior(Hero):
     def __init__(self, name):

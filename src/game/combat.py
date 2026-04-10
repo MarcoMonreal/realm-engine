@@ -1,5 +1,7 @@
 import math
 import random
+from hero import Warrior, Mystic, Assassin
+from enemy import Goblin, Skeleton, DarkKnight
 
 def calculate_damage(attacker_attack, defender_defense):
     if attacker_attack > defender_defense:
@@ -13,25 +15,23 @@ def calculate_damage(attacker_attack, defender_defense):
 def is_critical_hit(crit_chance):
     pass
 
-def use_potion(hero_stats):
-    max_hp = hero_stats.get("Max HP")
+def use_potion(hero):
+    max_hp = hero.max_hp
     
-    if hero_stats.get("Potions") > 0:
-        hero_stats["HP"] += 30
-        hero_stats["Potions"] -= 1
+    if hero.potions > 0:
+        hero.hp += 30
+        hero.potions -= 1
 
         # Ensure health doesn't exceed max HP
-        if hero_stats["HP"] > max_hp:
-            hero_stats["HP"] = max_hp
+        if hero.hp > max_hp:
+            hero.hp = max_hp
 
-        return print(f"\nYou drink a potion and restore some health. \nYou have {hero_stats.get("Potions")} potions left. \nYour current health is {hero_stats.get("HP")}.")
+        return print(f"\nYou drink a potion and restore some health. \nYou have {hero.potions} potions left. \nYour current health is {hero.hp}.")
     else:
         return print("\nYou are out of potions!")
 
-def hero_turn(hero_stats, enemy_stats):
-    hero_attack = hero_stats.get("Attack")
-    enemy_defense = enemy_stats.get("Defense")
-    enemy = enemy_stats.get("Name")
+def hero_turn(hero, enemy):
+    enemy_name = enemy.name
 
     options = {
         "Option 1": "Attack",
@@ -47,22 +47,24 @@ def hero_turn(hero_stats, enemy_stats):
     option_selected = input("\nEnter your choice: \n").lower().replace(" ", "")
 
     if option_selected == "option1" or option_selected == "1":
-        damage_dealt = calculate_damage(hero_attack, enemy_defense)
-        enemy_stats["HP"] -= damage_dealt
-        print(f"\nYou attack the {enemy}, dealing {damage_dealt} damage!")
+        damage_dealt = calculate_damage(hero.attack, enemy.defense)
+        enemy.take_damage(damage_dealt)
+        print(f"\nYou attack the {enemy_name}, dealing {damage_dealt} damage!")
     elif option_selected == "option2" or option_selected == "2":
-        use_potion(hero_stats)
+        use_potion(hero)
     else:
         print("Please select a valid option.")
 
-    enemy_health = enemy_stats.get("HP")
+    enemy_health = enemy.hp
 
-    #Only returning updated health for now
-    return print(f"{enemy}'s health is {enemy_health}.")
+    if enemy_health <= 0:
+        return print(f"{enemy_name}'s health is 0.")
+    else:
+        #Only returning updated health for now
+        return print(f"{enemy_name}'s health is {enemy_health}.")
 
-def enemy_turn(hero_stats, enemy_stats):
-    enemy = enemy_stats.get("Name")
-
+def enemy_turn(hero, enemy):
+    enemy_name = enemy.name
     print("\nThe enemy is taking their turn...")
     print("================================")
 
@@ -74,55 +76,43 @@ def enemy_turn(hero_stats, enemy_stats):
     enemy_choice = random.randint(1, len(enemy_options))
     
     if enemy_choice == 1:
-        damage_dealt = calculate_damage(enemy_stats.get("Attack"), hero_stats.get("Defense"))
-        hero_stats["HP"] -= damage_dealt
-        print(f"\nThe {enemy} attacks you, dealing {damage_dealt} damage!")
+        damage_dealt = calculate_damage(enemy.attack, hero.defense)
+        hero.take_damage(damage_dealt)
+        print(f"\nThe {enemy_name} attacks you, dealing {damage_dealt} damage!")
     elif enemy_choice == 2:
         #Simple caculation that I may update later
-        skill_damage = math.ceil(calculate_damage(enemy_stats.get("Attack"), hero_stats.get("Defense")) * 2)
-        hero_stats["HP"] -= skill_damage
-        print(f"\nThe {enemy} uses a powerful skill, dealing {skill_damage} damage!")
+        skill_damage = math.ceil(calculate_damage(enemy.attack, hero.defense) * 1.5)
+        hero.take_damage(skill_damage)
+        print(f"\nThe {enemy_name} uses a powerful skill, dealing {skill_damage} damage!")
 
-    hero_health = hero_stats.get("HP")
+    hero_health = hero.hp
 
     return print(f"Your current health is {hero_health}.")
 
-def run_combat(hero_stats, enemy_stats):
-    enemy = enemy_stats.get("Name")
-    print(f"A wild {enemy} appears!")
+def run_combat(hero, enemy):
+    enemy_name = enemy.name
 
     turn = 1
 
-    while hero_stats["HP"] > 0 and enemy_stats["HP"] > 0:
+    while hero.is_alive() and enemy.is_alive():
         if (turn % 2) == 0:
-            enemy_turn(hero_stats, enemy_stats)
+            enemy_turn(hero, enemy)
         else:
-            hero_turn(hero_stats, enemy_stats)
+            hero_turn(hero, enemy)
         
         turn += 1
 
-    if hero_stats["HP"] <= 0:
-        return print("\nYou have DIED!")
-    elif enemy_stats["HP"] <= 0:
-        return print(f"\nYou have slain the {enemy}.")
-
+    if hero.is_alive():
+        return print(f"\nYou have slain the {enemy_name}!\n")
+    else:
+        return print("\nYou have DIED!\n")
 
 
 if __name__ == "__main__":
-    hero_stats = {
-        "Name": "Aldric",
-        "Attack": 20,
-        "Defense": 8,
-        "Max HP": 100,
-        "HP": 100,
-        "Potions": 3
-    }
+    hero = Warrior("Aric")
+    enemy = Goblin()
 
-    enemy_stats = {
-        "Name": "Goblin Scout",
-        "Attack": 12,
-        "Defense": 4,
-        "HP": 30
-    }
+    print(hero)
+    print(enemy)
 
-    run_combat(hero_stats, enemy_stats)
+    run_combat(hero, enemy)
