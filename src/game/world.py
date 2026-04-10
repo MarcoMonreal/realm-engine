@@ -1,46 +1,52 @@
-realm_name = "Eldenmoor"
-population = 4200
-danger_level = 7.5
-is_at_war = False
+from enemy import Goblin
 
-print(f"Welcome to {realm_name}!")
-print(f"Population: {population}, Danger Level: {danger_level}")
 
-hero_name = input("Enter your hero's name: ")
-print(f"Hail, {hero_name}! The realm of {realm_name} awaits.")
+class Room:
+    def __init__(self, name, description, exits, enemy=None, item=None, visited=False):
+        self.name = name
+        self.description = description
+        self.exits = exits
+        self.enemy = enemy
+        self.item = item
+        self.visited = visited
 
-gold = 100
-potion_cost = 25
-potions_bought = 3
+    def __str__(self):
+        header = "==============================="
+        return f"{header}\n{self.name.upper()}\n{header}\n{self.description}\nExits: {', '.join(self.exits.keys())}"
 
-remaining_gold = gold - (potion_cost * potions_bought)
-print(f"You bought {potions_bought} potions. Gold remaining: {remaining_gold}")
+def build_world():
+    village_gates_exits = {
+        "north": "dark_forest_entrance",
+        "south": "armor_smith",
+    }
 
-if remaining_gold > 50:
-    print("You have plenty of gold.")
-elif remaining_gold > 0:
-    print("Funds are running low - spend wisely.")
-else:
-    print("You are broke! Seek a quest.")
+    dark_forest_entrance_exits = {
+        "south": "village_gates",
+        "east": "abandoned_cabin",
+        "west": "ancient_ruins",
+        "north": "cursed_grove"
+    }
 
-party = ["Aldric the Knight", "Seraphine the Mage", "Torvin the Rogue"]
-print(f"\nYour party has {len(party)} members:")
+    armor_smith_exits = {
+        "north": "village_gates",
+        "east": "tavern",
+        "west": "weapon_smith"
+    }
 
-for member in party:
-    print(f" - {member}")
+    tavern_exits = {
+        "west": "armor_smith"
+    }
 
-#Add a new member to the party
-party.append("Lyra the Healer")
-print(f"\n{party[-1]} has joined the party!")
+    weapon_smith_exits = {
+        "east": "armor_smith"
+    }
+    
+    rooms = {
+        "village_gates": Room("Village Gates", "The gates of the village, a place of safety and commerce.", village_gates_exits),
+        "dark_forest_entrance": Room("Dark Forest Entrance", "The entrance to the Dark Forest, a place of danger and mystery.", dark_forest_entrance_exits, enemy=Goblin()),
+        "armor_smith": Room("Armor Smith", "A humble blacksmith who specializes in crafting protective gear.", armor_smith_exits),
+        "tavern": Room("Tavern", "A cozy establishment where travelers gather to rest and share stories.", tavern_exits),
+        "weapon_smith": Room("Weapon Smith", "A skilled craftsman who creates powerful weapons for heroes.", weapon_smith_exits)
+    }
 
-hero_stats = {
-    "Name": hero_name,
-    "Health": 100,
-    "Attack": 15,
-    "Defense": 8,
-    "Gold": remaining_gold
-}
-
-print(f"\n--- Hero Stats ---")
-for stat, value in hero_stats.items():
-    print(f" {stat}: {value}")
+    return rooms
