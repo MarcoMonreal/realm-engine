@@ -1,5 +1,4 @@
 from src.game.hero import Warrior, Mystic, Assassin
-from src.game.enemy import Goblin, Skeleton, DarkKnight
 from src.game.world import build_world
 from src.game.combat import run_combat
 from src.game.save import save_game, load_game
@@ -48,6 +47,7 @@ def explore(hero, rooms, current_room_id="village_gates"):
             print(f"\n{enemy}\nStarting combat...")
             run_combat(hero, current_room.enemy)
             if hero.is_alive():
+                hero.skill_cooldown = 0
                 print(f"\nYou're currently at the {current_room.name}.\nExits: {', '.join(current_room.exits.keys())}")
             else:
                 print("GAME OVER...")

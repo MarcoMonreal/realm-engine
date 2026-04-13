@@ -1,9 +1,10 @@
 class Enemy:
-    def __init__(self, name, hp, attack, defense):
+    def __init__(self, name, hp, attack, defense, stun_counter=0):
         self.name = name
         self.hp = hp
         self.attack = attack
         self.defense = defense
+        self.stun_counter = stun_counter
 
     def take_damage(self, amount):
         self.hp = self.hp - amount
@@ -11,6 +12,9 @@ class Enemy:
 
     def is_alive(self):
         return self.hp > 0
+    
+    def is_stunned(self):
+        return self.stun_counter > 0
 
     def __str__(self):
         return f"\nA wild {self.name} appears! \n{self.name} - HP: {self.hp}, Attack: {self.attack}, Defense: {self.defense}"
