@@ -1,5 +1,5 @@
 import json
-from hero import Warrior, Mystic, Assassin
+from .hero import Warrior, Mystic, Assassin
 import os
 os.makedirs("data", exist_ok=True)
 

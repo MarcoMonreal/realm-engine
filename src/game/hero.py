@@ -38,21 +38,27 @@ class Warrior(Hero):
         # High HP and defense, low attack
         super().__init__(name, "Warrior", attack=5, defense=10, hp=25, max_hp=25, potions=1, gold=0, experience=0, level=1)
         
-    def special_attack(self):
+    def cleave(self):
+        # A powerful attack that hits an enemy twice, 
+        # but has a cooldown of 3 turns
         pass
 
 class Mystic(Hero):
     def __init__(self, name):
         # Low HP, high attack
-        super().__init__(name, "Mystic", attack=15, defense=3, hp=15, max_hp=15, potions=3, gold=5, experience=0, level=1)
+        super().__init__(name, "Mystic", attack=15, defense=5, hp=15, max_hp=15, potions=3, gold=5, experience=0, level=1)
 
-    def special_attack(self):
+    def entomb(self):
+        # A powerful attack that has a chance to stun the enemy for 1 turn,
+        # but has a cooldown of 3 turns
         pass
 
 class Assassin(Hero):
     def __init__(self, name):
         # Balanced class, high crit chance
-        super().__init__(name, "Assassin", attack=10, defense=5, hp=20, max_hp=20, potions=2, gold=10, experience=0, level=1)
+        super().__init__(name, "Assassin", attack=10, defense=7, hp=20, max_hp=20, potions=2, gold=10, experience=0, level=1)
         
-    def special_attack(self):
+    def kidney_strike(self):
+        # A powerful attack that has a high chance to crit,
+        # but has a cooldown of 3 turns
         pass

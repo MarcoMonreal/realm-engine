@@ -1,7 +1,8 @@
 import math
 import random
-from hero import Warrior, Mystic, Assassin
-from enemy import Goblin, Skeleton, DarkKnight
+from src.game import hero
+from .hero import Warrior, Mystic, Assassin
+from .enemy import Goblin, Skeleton, DarkKnight
 
 def calculate_damage(attacker_attack, defender_defense):
     if attacker_attack > defender_defense:
@@ -39,7 +40,7 @@ def hero_turn(hero, enemy):
     }
 
     print("\nIt's your turn! What will you do?")
-    print("================================")
+    print("==========================")
     print("Choose an action:")
     for option, value in options.items():
         print(f"\n - {option}: {value}")
@@ -66,7 +67,7 @@ def hero_turn(hero, enemy):
 def enemy_turn(hero, enemy):
     enemy_name = enemy.name
     print("\nThe enemy is taking their turn...")
-    print("================================")
+    print("=========================")
 
     enemy_options = {
         "1": "Basic attack",
@@ -87,7 +88,10 @@ def enemy_turn(hero, enemy):
 
     hero_health = hero.hp
 
-    return print(f"Your current health is {hero_health}.")
+    if hero_health <= 0:
+        return print(f"Your current health is 0.")
+    else:
+        return print(f"Your current health is {hero_health}.")
 
 def run_combat(hero, enemy):
     enemy_name = enemy.name
