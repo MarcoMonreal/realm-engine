@@ -61,37 +61,33 @@ def hero_turn(hero, enemy):
     for option, value in options.items():
         print(f"\n - {option}: {value}")
 
-    option_selected = input("\nEnter your choice: \n").lower().replace(" ", "")
+    while True:
+        option_selected = input("\nEnter your choice: \n").lower().replace(" ", "")
 
-    if option_selected == "option1" or option_selected == "1":
-        damage_dealt = calculate_damage(hero.attack, enemy.defense, hero.crit_chance)
-        enemy.take_damage(damage_dealt)
-        print(f"\nYou attack the {enemy_name}, dealing {damage_dealt} damage!")
-    elif option_selected == "option2" or option_selected == "2":
-        if hero.skill_cooldown != 0:
-            print(f"\nYou cannot use your skill yet, {hero.name}!\nYour skill's cooldown is currently {hero.skill_cooldown} turns.")
-            return hero_turn(hero, enemy)
-        else:
-            if hero.hero_class == "Warrior":
-                if hero.skill_cooldown != 0:
-                    print(f"\nYou cannot use your skill yet, {hero.name}!\nCleave's cooldown is currently {hero.skill_cooldown} turns.")
-                else:
+        if option_selected == "option1" or option_selected == "1":
+            damage_dealt = calculate_damage(hero.attack, enemy.defense, hero.crit_chance)
+            enemy.take_damage(damage_dealt)
+            print(f"\nYou attack the {enemy_name}, dealing {damage_dealt} damage!")
+            break
+        elif option_selected == "option2" or option_selected == "2":
+            if hero.skill_cooldown != 0:
+                print(f"\nYou cannot use your skill yet, {hero.name}!\nYour skill's cooldown is currently {hero.skill_cooldown} turns.")
+            else:
+                if hero.hero_class == "Warrior":
                     # Two separate attacks that each calculate damage and crits independently
                     first_hit = calculate_damage(hero.cleave(), enemy.defense, hero.crit_chance)
                     second_hit = calculate_damage(hero.cleave(), enemy.defense, hero.crit_chance)
                     damage_dealt = first_hit + second_hit
                     enemy.take_damage(damage_dealt)
-                    hero.skill_cooldown = 6
+                    hero.skill_cooldown = 3
                     print(f"\nYou Cleave the {enemy_name}, dealing {damage_dealt} damage!")
                     print(f"Cleave's first strike dealt {first_hit} damage and the second strike dealt {second_hit} damage! \nCleave's cooldown is now {hero.skill_cooldown} turns.")
-            elif hero.hero_class == "Mystic":
-                if hero.skill_cooldown != 0:
-                    print(f"\nYou cannot use your skill yet, {hero.name}!\nEntomb's cooldown is currently {hero.skill_cooldown} turns.")
-                else:
+                    break
+                elif hero.hero_class == "Mystic":
                     entomb_damage = hero.attack * 1.5
                     damage_dealt = calculate_damage(entomb_damage, enemy.defense, hero.crit_chance)
                     enemy.take_damage(damage_dealt)
-                    hero.skill_cooldown = 6
+                    hero.skill_cooldown = 3
 
                     if hero.entomb():
                         enemy.stun_counter = 1
@@ -100,21 +96,20 @@ def hero_turn(hero, enemy):
                     else:
                         print(f"\nYou cast Entomb on the {enemy_name}, dealing {damage_dealt} damage!")
                         print(f"Entomb's cooldown is now {hero.skill_cooldown} turns.")
-            elif hero.hero_class == "Assassin":
-                if hero.skill_cooldown != 0:
-                    print(f"\nYou cannot use your skill yet, {hero.name}!\nKidney Strike's cooldown is currently {hero.skill_cooldown} turns.")
-                else:
+                    break
+                elif hero.hero_class == "Assassin":
                     increased_attack = hero.attack * 1.75
                     damage_dealt = calculate_damage(increased_attack, enemy.defense, hero.kidney_strike())
                     enemy.take_damage(damage_dealt)
-                    hero.skill_cooldown = 6
+                    hero.skill_cooldown = 3
                     print(f"\nYou use Kidney Strike on the {enemy_name}, dealing {damage_dealt} damage!")
                     print(f"Kidney Strike's cooldown is now {hero.skill_cooldown} turns.")
-    elif option_selected == "option3" or option_selected == "3":
-        print(use_potion(hero))
-    else:
-        print("Please select a valid option.")
-        hero_turn(hero, enemy)
+                    break
+        elif option_selected == "option3" or option_selected == "3":
+            print(use_potion(hero))
+            break
+        else:
+            print("Please select a valid option.")
 
     enemy_health = enemy.hp
 
@@ -167,11 +162,11 @@ def run_combat(hero, enemy):
     while hero.is_alive() and enemy.is_alive():
         if (turn % 2) == 0:
             enemy_turn(hero, enemy)
+
+            if hero.skill_cooldown > 0:
+                hero.skill_cooldown -= 1
         else:
             hero_turn(hero, enemy)
-
-        if hero.skill_cooldown > 0:
-            hero.skill_cooldown -= 1
         
         turn += 1
 
