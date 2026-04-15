@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from ..schemas import CombatSessionResponse, TurnResponse
 from ..database import get_db
 from ..models import HeroModel, CombatSessionModel
 from src.game.hero import Warrior, Mystic, Assassin
@@ -36,7 +37,7 @@ def get_enemy_object(enemy_type, enemy_hp=None):
 
     return enemy
 
-@router.post("/start/{hero_id}")
+@router.post("/start/{hero_id}", response_model=CombatSessionResponse)
 def start_combat(hero_id: int, enemy_type: str="Goblin", db: Session=Depends(get_db)):
     hero = db.query(HeroModel).filter(HeroModel.id == hero_id).first()
     if not hero:
@@ -64,9 +65,7 @@ def start_combat(hero_id: int, enemy_type: str="Goblin", db: Session=Depends(get
     
     return session
 
-    
-
-@router.get("/{session_id}")
+@router.get("/{session_id}", response_model=CombatSessionResponse)
 def get_session(session_id: int, db: Session=Depends(get_db)):
     session = db.query(CombatSessionModel).filter(CombatSessionModel.id == session_id).first()
     if not session:
@@ -74,7 +73,7 @@ def get_session(session_id: int, db: Session=Depends(get_db)):
     
     return session
 
-@router.post("/{session_id}/turn")
+@router.post("/{session_id}/turn", response_model=TurnResponse)
 def take_turn(session_id: int, action: str, db: Session=Depends(get_db)):
     session = db.query(CombatSessionModel).filter(CombatSessionModel.id == session_id).first()
     if not session:
@@ -126,9 +125,9 @@ def take_turn(session_id: int, action: str, db: Session=Depends(get_db)):
         "hero_damage": hero_damage, # type: ignore
         "enemy_damage": enemy_damage,
         "outcome": outcome,
-        "debug": {
-            "enemy_attack": enemy.attack,
-            "hero_defense": hero.defense,
-            "raw_diff": enemy.attack - hero.defense
-        }
+       # "debug": {
+       #     "enemy_attack": enemy.attack,
+       #     "hero_defense": hero.defense,
+       #     "raw_diff": enemy.attack - hero.defense
+       # }
     }
