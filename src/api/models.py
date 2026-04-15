@@ -34,6 +34,6 @@ class CombatSessionModel(Base):
     enemy_hp = Column(Integer)
     enemy_max_hp = Column(Integer)
     is_active = Column(Boolean)
-    outcome = Column(String, nullable=False)
+    outcome = Column(String, nullable=True)
 
     hero = relationship("HeroModel", back_populates="combat_sessions")

@@ -44,7 +44,7 @@ class Hero:
 class Warrior(Hero):
     def __init__(self, name):
         # High HP and defense, low attack
-        super().__init__(name, "Warrior", attack=5, crit_chance=0.1, defense=10, hp=30, max_hp=30, skill_cooldown=0, potions=1, gold=0, experience=0, level=1)
+        super().__init__(name, "Warrior", attack=5, crit_chance=0.1, defense=9, hp=30, max_hp=30, skill_cooldown=0, potions=1, gold=0, experience=0, level=1)
         
     def cleave(self):
         # A powerful attack that hits an enemy twice, 
